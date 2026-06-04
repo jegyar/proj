@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VibePath</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ─────────────────────────────
+   TOKENS
+───────────────────────────── */
+:root {
+  --bg:     #07090F;
+  --card:   rgba(255,255,255,0.042);
+  --card-h: rgba(255,255,255,0.072);
+  --line:   rgba(255,255,255,0.072);
+  --line-h: rgba(255,255,255,0.120);
+
+  --t1: #E8ECF4;
+  --t2: #7C8594;
+  --t3: #3A4052;
+
+  --lime:   #A3FF5F;
+  --la:     rgba(163,255,95,0.08);
+  --lb:     rgba(163,255,95,0.22);
+  --purple: #8B5CF6;
+  --pa:     rgba(139,92,246,0.08);
+  --pb:     rgba(139,92,246,0.22);
+  --blue:   #38BDF8;
+  --boa:    rgba(56,189,248,0.08);
+  --bob:    rgba(56,189,248,0.22);
+  --amber:  #FBBF24;
+  --aa:     rgba(251,191,36,0.08);
+  --ab:     rgba(251,191,36,0.22);
+  --teal:   #2DD4BF;
+  --pink:   #F472B6;
+
+  --map:    #07101E;
+
+  --f1: 'DM Sans',  system-ui, sans-serif;
+  --f2: 'Syne',     sans-serif;
+  --f3: 'DM Mono',  monospace;
+
+  --r-s: 10px;
+  --r-m: 16px;
+  --r-l: 22px;
+  --r-xl: 28px;
+}
+
+/* ─────────────────────────────
+   BASE
+───────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--f1);
+  background: var(--bg);
+  color: var(--t1);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────────
+   PAGE & LAYOUT
+───────────────────────────── */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 28px 56px;
+  gap: 40px;
+}
+
+.layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 56px;
+  width: 100%;
+  max-width: 1020px;
+}
+
+/* background glow */
+.page::before {
+  content: '';
+  position: fixed;
+  top: -200px; left: -150px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(163,255,95,0.04) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+.page::after {
+  content: '';
+  position: fixed;
+  bottom: -200px; right: -150px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+.page > * { position: relative; z-index: 1; }
+
+/* ─────────────────────────────
+   HEADER
+───────────────────────────── */
+header {
+  width: 100%;
+  max-width: 1020px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon {
+  width: 32px; height: 32px;
+  background: var(--la);
+  border: 1px solid var(--lb);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-icon svg { width: 15px; height: 15px; }
+.logo-name {
+  font-family: var(--f2);
+  font-size: 18px; font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.logo-name span { color: var(--lime); }
+.header-tag {
+  font-size: 11.5px; color: var(--t3);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 4px 14px;
+}
+
+/* ─────────────────────────────
+   INFO COLUMN
+───────────────────────────── */
+.info-col {
+  flex: 1;
+  padding-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.info-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--lime);
+  margin-bottom: 14px;
+}
+.info-title {
+  font-family: var(--f2);
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1.2px;
+}
+.info-title em { color: var(--lime); font-style: normal; }
+.info-desc {
+  font-size: 14px;
+  color: var(--t2);
+  line-height: 1.75;
+  max-width: 280px;
+  margin-top: 14px;
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  cursor: default;
+  transition: background 0.2s, transform 0.18s;
+}
+.feature-item:hover {
+  background: var(--card-h);
+  transform: translateX(4px);
+}
+.feature-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.feature-icon svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+.ft { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.fs { font-size: 11.5px; color: var(--t2); }
+
+/* advantages under info */
+.adv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.adv-card {
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+}
+.adv-num {
+  font-family: var(--f3);
+  font-size: 20px; font-weight: 500;
+  color: var(--lime);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.adv-text { font-size: 11.5px; color: var(--t3); line-height: 1.5; }
+
+/* ─────────────────────────────
+   PHONE FRAME
+───────────────────────────── */
+.phone-col { flex-shrink: 0; }
+
+.phone {
+  width: 390px;
+  height: 844px;
+  background: linear-gradient(160deg, #1A2035 0%, #0C0E1C 100%);
+  border-radius: 54px;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.97),
+    0 28px 80px rgba(0,0,0,0.68),
+    inset 0 1px 0 rgba(255,255,255,0.09),
+    inset 0 -1px 0 rgba(0,0,0,0.4);
+  padding: 12px;
+  position: relative;
+}
+
+/* side button – power */
+.phone::before {
+  content: '';
+  position: absolute;
+  right: -3px; top: 152px;
+  width: 3px; height: 60px;
+  background: #1a2035;
+  border-radius: 0 3px 3px 0;
+  box-shadow: inset -1px 0 0 rgba(255,255,255,0.07);
+}
+/* side button – volume */
+.phone::after {
+  content: '';
+  position: absolute;
+  left: -3px; top: 116px;
+  width: 3px; height: 28px;
+  background: #1a2035;
+  border-radius: 3px 0 0 3px;
+  box-shadow:
+    inset 1px 0 0 rgba(255,255,255,0.07),
+    0 52px 0 0 #1a2035,
+    0 52px 0 2px #0c0e1c;
+}
+
+/* screen glass */
+.phone-screen {
+  width: 100%; height: 100%;
+  background: var(--bg);
+  border-radius: 44px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+/* subtle screen glare */
+.phone-screen::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 140px;
+  background: linear-gradient(150deg, rgba(255,255,255,0.020) 0%, transparent 60%);
+  border-radius: 44px 44px 0 0;
+  pointer-events: none; z-index: 50;
+}
+
+/* Dynamic Island */
+.di {
+  position: absolute;
+  top: 11px; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 34px;
+  background: #000;
+  border-radius: 17px;
+  z-index: 51;
+  display: flex; align-items: center;
+  justify-content: flex-end; padding-right: 10px; gap: 7px;
+}
+.di-cam { width: 10px; height: 10px; border-radius: 50%; background: #0a0a12; border: 2px solid #1a1a26; }
+.di-dot { width: 5.5px; height: 5.5px; border-radius: 50%; background: #111; border: 1.5px solid #1e1e2c; }
+
+/* Status bar */
+.statusbar {
+  height: 56px;
+  flex-shrink: 0;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 22px 10px;
+  position: relative; z-index: 10;
+}
+.sb-time { font-family: var(--f3); font-size: 15px; font-weight: 500; }
+.sb-icons { display: flex; align-items: center; gap: 6px; }
+.sb-icons svg { width: 16px; height: 16px; }
+
+/* ─────────────────────────────
+   SCREEN SYSTEM
+───────────────────────────── */
+.screens-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  background: var(--bg);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.24s ease, visibility 0.24s;
+}
+.screen.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.screen-scroll {
+  flex: 1;
+  overflow-y: auto; overflow-x: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.screen-scroll::-webkit-scrollbar { display: none; }
+
+/* Screen app-bar */
+.app-bar {
+  flex-shrink: 0;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+.app-bar-title {
+  font-family: var(--f2);
+  font-size: 18px; font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.app-bar-action {
+  font-size: 13px; font-weight: 500;
+  color: var(--blue);
+  padding: 5px 12px;
+  background: var(--boa); border: 1px solid var(--bob);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.app-bar-action:hover { background: rgba(56,189,248,0.14); }
+
+/* ─────────────────────────────
+   SHARED COMPONENTS
+───────────────────────────── */
+
+/* card */
+.c {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  transition: background 0.18s, border-color 0.18s;
+  cursor: pointer;
+}
+.c:hover { background: var(--card-h); border-color: var(--line-h); }
+
+/* badge */
+.badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 6px;
+  white-space: nowrap; line-height: 1.5;
+}
+.badge-l { background: var(--la); color: var(--lime);   border: 1px solid var(--lb); }
+.badge-p { background: var(--pa); color: var(--purple); border: 1px solid var(--pb); }
+.badge-b { background: var(--boa); color: var(--blue);  border: 1px solid var(--bob); }
+.badge-a { background: var(--aa);  color: var(--amber); border: 1px solid var(--ab); }
+
+/* section */
+.section { padding: 0 20px; margin-bottom: 20px; }
+.section-label {
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--t3); margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.section-link { font-size: 12px; font-weight: 500; color: var(--t3); cursor: pointer; letter-spacing: 0; text-transform: none; transition: color 0.18s; }
+.section-link:hover { color: var(--t2); }
+
+/* place row */
+.place-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+}
+.place-row:last-child { margin-bottom: 0; }
+.place-emoji {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.place-info { flex: 1; min-width: 0; }
+.place-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.place-meta { display: flex; align-items: center; gap: 6px; }
+.place-dist { font-family: var(--f3); font-size: 11.5px; color: var(--t3); }
+.place-right { text-align: right; flex-shrink: 0; }
+.place-price { font-family: var(--f3); font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 3px; }
+.place-sub { font-size: 11px; color: var(--t3); }
+
+/* primary action button */
+.btn-main {
+  display: block;
+  margin: 4px 20px 20px;
+  padding: 16px;
+  background: var(--la);
+  border: 1.5px solid var(--lb);
+  border-radius: var(--r-m);
+  text-align: center;
+  font-size: 15px; font-weight: 600;
+  color: var(--lime);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  letter-spacing: 0.2px;
+}
+.btn-main:hover { background: rgba(163,255,95,0.13); box-shadow: 0 0 20px rgba(163,255,95,0.10); }
+.btn-main:active { transform: scale(0.99); }
+.btn-blue { background: var(--boa); border-color: var(--bob); color: var(--blue); }
+.btn-blue:hover { background: rgba(56,189,248,0.13); box-shadow: 0 0 20px rgba(56,189,248,0.10); }
+
+/* ─────────────────────────────
+   HOME SCREEN
+───────────────────────────── */
+.home-header {
+  flex-shrink: 0;
+  padding: 16px 20px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.home-greeting { font-size: 13px; color: var(--t2); margin-bottom: 3px; }
+.home-name { font-family: var(--f2); font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+.home-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600; color: #fff; flex-shrink: 0;
+}
+
+.budget-card {
+  flex-shrink: 0;
+  margin: 0 20px 20px;
+  padding: 18px 20px;
+  background: var(--la);
+  border: 1px solid var(--lb);
+  border-radius: var(--r-xl);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.bc-left { }
+.bc-amount { font-family: var(--f3); font-size: 32px; font-weight: 500; color: var(--lime); line-height: 1; margin-bottom: 4px; }
+.bc-label { font-size: 12px; color: rgba(163,255,95,0.5); }
+.bc-icon {
+  width: 48px; height: 48px;
+  background: rgba(163,255,95,0.10);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.bc-icon svg { width: 22px; height: 22px; stroke: var(--lime); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* saved compact row */
+.mini-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; margin-bottom: 8px;
+}
+.mini-row:last-child { margin-bottom: 0; }
+.mini-ico { font-size: 18px; flex-shrink: 0; }
+.mini-info { flex: 1; min-width: 0; }
+.mini-name { font-size: 13.5px; font-weight: 600; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-sub { font-size: 11.5px; color: var(--t3); }
+.mini-dist { font-family: var(--f3); font-size: 11.5px; color: var(--t3); }
+
+/* ─────────────────────────────
+   MAP SCREEN
+───────────────────────────── */
+.map-header {
+  flex-shrink: 0;
+  padding: 10px 14px 8px;
+  background: var(--bg);
+  position: relative; z-index: 5;
+}
+.map-row1 { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+
+.map-search {
+  flex: 1; height: 40px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-s);
+  display: flex; align-items: center;
+  padding: 0 14px; gap: 8px;
+}
+.map-search svg { width: 14px; height: 14px; stroke: var(--t3); fill: none; stroke-width: 1.5; stroke-linecap: round; flex-shrink: 0; }
+.map-search span { font-size: 13.5px; color: var(--t3); }
+
+.map-btn {
+  width: 40px; height: 40px; flex-shrink: 0;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--r-s);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.18s;
+}
+.map-btn:hover { background: var(--card-h); }
+.map-btn svg { width: 15px; height: 15px; stroke: var(--t2); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+
+.budget-tag {
+  height: 40px; flex-shrink: 0;
+  background: var(--aa); border: 1px solid var(--ab);
+  border-radius: var(--r-s);
+  display: flex; align-items: center; gap: 6px; padding: 0 12px;
+}
+.budget-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+.budget-tag-val { font-family: var(--f3); font-size: 13px; font-weight: 500; color: var(--amber); white-space: nowrap; }
+
+.chips-scroll { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+.chips-scroll::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0; height: 28px; padding: 0 12px;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 12.5px; font-weight: 500; color: var(--t2);
+  cursor: pointer; white-space: nowrap; display: flex; align-items: center;
+  transition: all 0.18s; user-select: none;
+}
+.chip:hover { background: var(--card-h); }
+.chip.active { background: var(--la); border-color: var(--lb); color: var(--lime); }
+
+/* ─── MAP CANVAS ─── */
+.map-canvas {
+  flex: 1; position: relative; overflow: hidden;
+  background: var(--map);
+}
+/* fine grid */
+.map-canvas::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.050) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.050) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+/* major streets */
+.map-canvas::after {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.090) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(255,255,255,0.090) 1.5px, transparent 1.5px);
+  background-size: 78px 78px;
+  background-position: 13px 13px;
+}
+/* city blocks */
+.blk { position: absolute; z-index: 1; border-radius: 2px; }
+
+/* route */
+.route-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 3; pointer-events: none; overflow: visible;
+}
+.route-glow { fill: none; stroke: var(--lime); stroke-width: 10; stroke-linecap: round; opacity: 0.07; }
+.route-line {
+  fill: none; stroke: var(--lime); stroke-width: 2.5;
+  stroke-linecap: round; stroke-dasharray: 7 5;
+  stroke-dashoffset: 800;
+  animation: draw 3.4s ease-out 0.3s forwards;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* map pins */
+.pin {
+  position: absolute; z-index: 5;
+  transform: translate(-50%, -100%);
+  display: flex; flex-direction: column; align-items: center;
+  cursor: pointer;
+  animation: pin-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.pin:nth-child(1) { animation-delay: 0.5s; }
+.pin:nth-child(2) { animation-delay: 0.7s; }
+.pin:nth-child(3) { animation-delay: 0.9s; }
+.pin:nth-child(4) { animation-delay: 1.1s; }
+.pin:nth-child(5) { animation-delay: 1.3s; }
+@keyframes pin-in { from { opacity: 0; transform: translate(-50%, -60%) scale(0.3); } to { opacity: 1; transform: translate(-50%, -100%) scale(1); } }
+
+.pin-body {
+  width: 32px; height: 32px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.pin:hover .pin-body { transform: rotate(-45deg) scale(1.15); }
+.pin-emoji { transform: rotate(45deg); font-size: 13px; line-height: 1; }
+.pin-tag {
+  margin-top: 4px;
+  background: rgba(5,7,14,0.92); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 5px; padding: 2px 7px;
+  font-size: 10px; font-weight: 500; color: var(--t2);
+  white-space: nowrap; backdrop-filter: blur(6px);
+}
+
+/* user dot */
+.user-dot { position: absolute; z-index: 6; transform: translate(-50%,-50%); }
+.pulse-1, .pulse-2 {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%); border-radius: 50%;
+}
+.pulse-1 { width: 44px; height: 44px; background: rgba(56,189,248,0.08); border: 1.5px solid rgba(56,189,248,0.20); animation: pulse 2.4s ease-in-out infinite; }
+.pulse-2 { width: 28px; height: 28px; background: rgba(56,189,248,0.13); animation: pulse 2.4s ease-in-out 0.5s infinite; }
+@keyframes pulse { 0%,100%{transform:translate(-50%,-50%) scale(0.65);opacity:0} 20%{opacity:.9} 65%{transform:translate(-50%,-50%) scale(1.65);opacity:0} }
+.user-center { position: relative; z-index: 1; width: 14px; height: 14px; border-radius: 50%; background: var(--blue); border: 2.5px solid #fff; box-shadow: 0 0 12px rgba(56,189,248,0.6); }
+
+/* distance labels */
+.dist-tag { position: absolute; z-index: 6; background: rgba(5,7,14,0.90); border: 1px solid rgba(255,255,255,0.08); border-radius: 5px; padding: 2px 7px; font-family: var(--f3); font-size: 10px; color: var(--t3); pointer-events: none; backdrop-filter: blur(6px); white-space: nowrap; }
+
+/* map controls */
+.compass { position: absolute; top: 10px; left: 10px; z-index: 7; width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+.zoom { position: absolute; bottom: 222px; right: 10px; z-index: 7; background: rgba(8,12,26,0.96); border: 1px solid rgba(255,255,255,0.09); border-radius: var(--r-s); overflow: hidden; backdrop-filter: blur(12px); }
+.zoom-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 300; line-height: 1; color: var(--t3); cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.07); transition: background 0.18s, color 0.18s; user-select: none; }
+.zoom-btn:last-child { border-bottom: none; }
+.zoom-btn:hover { background: rgba(255,255,255,0.07); color: var(--t1); }
+
+/* ─── BOTTOM SHEET ─── */
+.bottom-sheet {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 8;
+  background: rgba(6,8,16,0.98);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px 18px 0 0;
+  padding: 8px 0 6px;
+  backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
+}
+.bs-handle { width: 38px; height: 4px; background: rgba(255,255,255,0.14); border-radius: 2px; margin: 0 auto 10px; }
+.bs-title { font-family: var(--f2); font-size: 15px; font-weight: 700; padding: 0 16px; margin-bottom: 10px; }
+.bs-list { padding: 0 10px; display: flex; flex-direction: column; gap: 7px; }
+
+.sheet-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.038); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--r-m);
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+}
+.sheet-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.12); }
+.sc-ico { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.sc-body { flex: 1; min-width: 0; }
+.sc-name { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sc-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; row-gap: 2px; }
+.sc-dist { font-family: var(--f3); font-size: 11px; color: var(--t3); }
+.sc-right { text-align: right; flex-shrink: 0; }
+.sc-price { font-family: var(--f3); font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 3px; }
+.sc-info { font-size: 10.5px; color: var(--t3); white-space: nowrap; }
+
+/* ─────────────────────────────
+   ROUTE SCREEN
+───────────────────────────── */
+.timeline { padding: 16px 20px 0; display: flex; flex-direction: column; }
+.tl-step { display: flex; gap: 14px; }
+.tl-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.tl-dot { width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid; flex-shrink: 0; }
+.tl-line { width: 2px; flex: 1; min-height: 12px; margin: 4px 0; border-radius: 1px; }
+.tl-body { flex: 1; min-width: 0; padding-bottom: 16px; }
+.tl-time { font-family: var(--f3); font-size: 12px; font-weight: 500; color: var(--t3); margin-bottom: 5px; }
+.tl-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 15px;
+}
+.tl-ico { font-size: 22px; flex-shrink: 0; }
+.tl-info { flex: 1; min-width: 0; }
+.tl-name { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+.tl-sub { font-size: 12.5px; color: var(--t3); }
+.tl-price { font-family: var(--f3); font-size: 16px; font-weight: 500; color: var(--amber); }
+
+.route-summary {
+  margin: 4px 20px 20px;
+  padding: 16px 18px;
+  border-radius: var(--r-xl);
+}
+.rs-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.rs-row:last-child { margin-bottom: 0; }
+.rs-label { font-size: 13px; color: var(--t2); }
+.rs-value { font-family: var(--f3); font-size: 18px; font-weight: 500; }
+.rs-bar-track { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; margin: 12px 0 8px; }
+.rs-bar { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--lime), var(--teal)); }
+
+/* ─────────────────────────────
+   BUDGET SCREEN
+───────────────────────────── */
+.budget-hero {
+  flex-shrink: 0;
+  margin: 16px 20px 14px;
+  padding: 20px 22px;
+  background: var(--aa); border: 1px solid var(--ab);
+  border-radius: var(--r-xl);
+}
+.bh-label { font-size: 12px; color: rgba(251,191,36,0.55); margin-bottom: 6px; }
+.bh-amount { font-family: var(--f3); font-size: 38px; font-weight: 500; color: var(--amber); line-height: 1; margin-bottom: 3px; }
+.bh-sub { font-size: 12px; color: rgba(251,191,36,0.45); }
+
+.stat-block {
+  flex-shrink: 0;
+  margin: 0 20px 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-m);
+}
+.stat-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.stat-title { font-size: 13.5px; font-weight: 600; color: var(--t2); }
+.stat-value { font-family: var(--f3); font-size: 14px; color: var(--t1); }
+.stat-prog { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+.stat-bar { height: 100%; border-radius: 3px; }
+
+.toggle-row {
+  flex-shrink: 0;
+  margin: 0 20px 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-m);
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer; transition: background 0.18s;
+}
+.toggle-row:hover { background: var(--card-h) !important; }
+.toggle-label { flex: 1; font-size: 14px; font-weight: 500; color: var(--t2); line-height: 1.4; }
+.toggle {
+  width: 44px; height: 24px; border-radius: 12px;
+  background: rgba(255,255,255,0.07); border: 1.5px solid var(--line);
+  position: relative; flex-shrink: 0;
+  transition: all 0.26s;
+}
+.toggle::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--t3); transition: transform 0.26s, background 0.26s;
+}
+.toggle.on { background: var(--la); border-color: var(--lb); }
+.toggle.on::after { background: var(--lime); transform: translateX(20px); }
+
+.tx-block {
+  flex-shrink: 0;
+  margin: 0 20px 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-m);
+}
+.tx-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--t3); margin-bottom: 10px; }
+.tx-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.tx-row:last-child { border-bottom: none; padding-bottom: 0; }
+.tx-ico { font-size: 16px; flex-shrink: 0; }
+.tx-info { flex: 1; min-width: 0; }
+.tx-name { font-size: 13.5px; font-weight: 500; margin-bottom: 2px; }
+.tx-date { font-size: 11.5px; color: var(--t3); }
+.tx-price { font-family: var(--f3); font-size: 14px; font-weight: 500; color: var(--amber); }
+
+/* ─────────────────────────────
+   PROFILE SCREEN
+───────────────────────────── */
+.profile-top {
+  flex-shrink: 0;
+  padding: 20px 20px 16px;
+  display: flex; align-items: center; gap: 16px;
+}
+.profile-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f2); font-size: 19px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.profile-name { font-family: var(--f2); font-size: 19px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 3px; }
+.profile-loc { font-size: 13px; color: var(--t3); }
+
+.p-section {
+  flex-shrink: 0;
+  margin: 0 20px 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-m);
+}
+.p-section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--t3); margin-bottom: 12px; }
+
+.interest-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.interest-chip {
+  font-size: 13px; font-weight: 500;
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--line);
+  border-radius: var(--r-s); color: var(--t2);
+  cursor: pointer; transition: all 0.18s; user-select: none;
+}
+.interest-chip:hover { background: var(--card-h); }
+.interest-chip.active { background: var(--pa); border-color: var(--pb); color: var(--purple); }
+
+.svc-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.svc-row:last-child { border-bottom: none; padding-bottom: 0; }
+.svc-icon { font-size: 19px; flex-shrink: 0; }
+.svc-name { flex: 1; font-size: 14px; font-weight: 500; }
+.svc-status { font-size: 11px; font-weight: 600; color: var(--lime); padding: 3px 9px; background: var(--la); border: 1px solid var(--lb); border-radius: 6px; }
+
+.priv-row { display: flex; align-items: center; justify-content: space-between; padding: 3px 0; }
+.priv-left { }
+.priv-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+.priv-sub { font-size: 12px; color: var(--t3); }
+
+/* ─────────────────────────────
+   BOTTOM NAV
+───────────────────────────── */
+.bottom-nav {
+  flex-shrink: 0;
+  height: 80px;
+  background: rgba(6,8,16,0.97);
+  border-top: 1px solid rgba(255,255,255,0.065);
+  display: flex; align-items: center;
+  padding: 0 6px 10px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.nav-item {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; padding: 6px 2px;
+  cursor: pointer; color: rgba(255,255,255,0.26);
+  transition: color 0.2s;
+}
+.nav-item:hover { color: rgba(255,255,255,0.50); }
+.nav-item.active { color: var(--lime); }
+.nav-item svg { width: 23px; height: 23px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.nav-item span { font-size: 10.5px; font-weight: 500; letter-spacing: 0.1px; }
+.nav-map-icon {
+  width: 48px; height: 38px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.nav-item.active .nav-map-icon {
+  background: var(--la); border-color: var(--lb);
+  box-shadow: 0 0 16px rgba(163,255,95,0.14);
+}
+
+/* ─────────────────────────────
+   RESPONSIVE
+───────────────────────────── */
+@media (max-width: 880px) {
+  .layout { flex-direction: column; align-items: center; gap: 36px; }
+  .info-col { padding-top: 0; align-items: center; text-align: center; max-width: 440px; }
+  .info-desc { max-width: 360px; }
+  .feature-item:hover { transform: none; }
+  .adv-grid { width: 100%; max-width: 380px; }
+}
+@media (max-width: 440px) {
+  .page { padding: 20px 14px 40px; }
+  .phone { width: 360px; height: 780px; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 15 15" fill="none"><path d="M7.5 1.5C5.3 1.5 3.5 3.3 3.5 5.5c0 3.5 4 8 4 8s4-4.5 4-8c0-2.2-1.8-4-4-4z" fill="#A3FF5F"/><circle cx="7.5" cy="5.5" r="1.8" fill="#07090F"/></svg>
+    </div>
+    <div class="logo-name">Vibe<span>Path</span></div>
+  </div>
+  <span class="header-tag">MVP концепт</span>
+</header>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+
+  <!-- INFO COL -->
+  <aside class="info-col">
+    <div>
+      <p class="info-eyebrow">Мобильное приложение</p>
+      <h1 class="info-title">Места рядом.<br><em>По бюджету.</em></h1>
+      <p class="info-desc">Карта с ближайшими местами. Фильтры по бюджету, расстоянию и интересам. Маршрут на вечер — за несколько шагов.</p>
+    </div>
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon" style="background:var(--la);color:var(--lime)">
+          <svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="5"/><circle cx="9" cy="9" r="1.8" fill="currentColor" stroke="none"/><path d="M9 2.5v2M9 13.5v2M2.5 9h2M13.5 9h2"/></svg>
+        </div>
+        <div><div class="ft">Карта рядом</div><div class="fs">Ближайшие места с фильтрами</div></div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:var(--pa);color:var(--purple)">
+          <svg viewBox="0 0 18 18"><rect x="2" y="5.5" width="14" height="10" rx="2"/><path d="M2 9.5h14"/><circle cx="6" cy="13" r="1" fill="currentColor" stroke="none"/><path d="M6 5.5V4a3 3 0 016 0v1.5"/></svg>
+        </div>
+        <div><div class="ft">Фильтр бюджета</div><div class="fs">Только то, что вписывается в лимит</div></div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:var(--boa);color:var(--blue)">
+          <svg viewBox="0 0 18 18"><circle cx="4.5" cy="4.5" r="2"/><circle cx="13.5" cy="13.5" r="2"/><circle cx="13.5" cy="5.5" r="2"/><path d="M6.5 4.5h4a3 3 0 013 3v4" stroke-linecap="round"/></svg>
+        </div>
+        <div><div class="ft">Маршрут</div><div class="fs">Сложите вечер из нескольких мест</div></div>
+      </div>
+    </div>
+    <div class="adv-grid">
+      <div class="adv-card"><div class="adv-num">&lt;&thinsp;1 мин</div><div class="adv-text">от открытия до маршрута</div></div>
+      <div class="adv-card"><div class="adv-num">5</div><div class="adv-text">фильтров подбора</div></div>
+      <div class="adv-card"><div class="adv-num">Real-time</div><div class="adv-text">геолокация</div></div>
+      <div class="adv-card"><div class="adv-num">0</div><div class="adv-text">лишнего в ленте</div></div>
+    </div>
+  </aside>
+
+  <!-- PHONE -->
+  <div class="phone-col">
+  <div class="phone">
+  <div class="phone-screen">
+
+    <!-- Dynamic Island -->
+    <div class="di"><div class="di-dot"></div><div class="di-cam"></div></div>
+
+    <!-- Status bar -->
+    <div class="statusbar">
+      <span class="sb-time">09:41</span>
+      <div class="sb-icons">
+        <svg viewBox="0 0 15 11" fill="var(--t1)"><rect x="0" y="7" width="2.5" height="4" rx=".5"/><rect x="4.2" y="4.5" width="2.5" height="6.5" rx=".5"/><rect x="8.4" y="2" width="2.5" height="9" rx=".5"/><rect x="12.6" y="0" width="2.4" height="11" rx=".5" opacity=".3"/></svg>
+        <svg viewBox="0 0 14 10" fill="none" stroke="var(--t1)" stroke-width="1.1" stroke-linecap="round"><path d="M.5 3.8a9 9 0 0113 0M2.8 6.3a5.5 5.5 0 018.4 0M5.2 8.8a2.5 2.5 0 013.6 0"/></svg>
+        <svg viewBox="0 0 20 10" fill="none"><rect x=".5" y=".5" width="15" height="9" rx="2" stroke="var(--t1)" stroke-opacity=".6"/><rect x="16.5" y="3" width="2" height="4" rx="1" fill="var(--t1)" fill-opacity=".6"/><rect x="1.5" y="1.5" width="10" height="7" rx="1.5" fill="var(--t1)"/></svg>
+      </div>
+    </div>
+
+    <!-- SCREENS -->
+    <div class="screens-container">
+
+      <!-- ═══════════ HOME ═══════════ -->
+      <div class="screen" data-screen="home">
+        <div class="home-header">
+          <div>
+            <div class="home-greeting">Добрый вечер</div>
+            <div class="home-name">Алексей</div>
+          </div>
+          <div class="home-avatar">АМ</div>
+        </div>
+
+        <div class="budget-card">
+          <div class="bc-left">
+            <div class="bc-amount">68 BYN</div>
+            <div class="bc-label">доступно на досуг</div>
+          </div>
+          <div class="bc-icon">
+            <svg viewBox="0 0 22 22"><rect x="2" y="6" width="18" height="13" rx="2"/><path d="M2 10h18"/><circle cx="6.5" cy="14.5" r="1.3" fill="currentColor" stroke="none"/></svg>
+          </div>
+        </div>
+
+        <div class="screen-scroll">
+          <div class="section">
+            <div class="section-label">
+              Рядом сейчас
+              <span class="section-link">все места →</span>
+            </div>
+            <div class="c place-row">
+              <div class="place-emoji" style="background:rgba(163,255,95,.08)">☕</div>
+              <div class="place-info">
+                <div class="place-name">Urban Coffee</div>
+                <div class="place-meta"><span class="place-dist">450 м</span><span class="badge badge-l">по бюджету</span></div>
+              </div>
+              <div class="place-right"><div class="place-price">12 BYN</div><div class="place-sub">8 мин пешком</div></div>
+            </div>
+            <div class="c place-row">
+              <div class="place-emoji" style="background:rgba(139,92,246,.08)">🎨</div>
+              <div class="place-info">
+                <div class="place-name">Gallery Space</div>
+                <div class="place-meta"><span class="place-dist">1.1 км</span><span class="badge badge-p">по интересам</span></div>
+              </div>
+              <div class="place-right"><div class="place-price">18 BYN</div><div class="place-sub">до 21:00</div></div>
+            </div>
+            <div class="c place-row">
+              <div class="place-emoji" style="background:rgba(56,189,248,.08)">🍹</div>
+              <div class="place-info">
+                <div class="place-name">Local Bar</div>
+                <div class="place-meta"><span class="place-dist">1.4 км</span><span class="badge badge-b">друзья были</span></div>
+              </div>
+              <div class="place-right"><div class="place-price">22 BYN</div><div class="place-sub">забронировать</div></div>
+            </div>
+          </div>
+
+          <div class="btn-main cta-route">Собрать маршрут →</div>
+
+          <div class="section">
+            <div class="section-label">Сохранённые<span class="section-link">12 мест</span></div>
+            <div class="c mini-row">
+              <div class="mini-ico">☕</div>
+              <div class="mini-info"><div class="mini-name">Urban Coffee</div><div class="mini-sub">кофейня</div></div>
+              <div class="mini-dist">450 м</div>
+            </div>
+            <div class="c mini-row">
+              <div class="mini-ico">🎨</div>
+              <div class="mini-info"><div class="mini-name">Gallery Space</div><div class="mini-sub">выставка</div></div>
+              <div class="mini-dist">1.1 км</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /home -->
+
+      <!-- ═══════════ MAP ═══════════ -->
+      <div class="screen active" data-screen="map">
+        <div class="map-header">
+          <div class="map-row1">
+            <div class="map-search">
+              <svg viewBox="0 0 14 14"><circle cx="6" cy="6" r="4"/><path d="m10 10 2.5 2.5" stroke-linecap="round"/></svg>
+              <span>Куда хотите пойти?</span>
+            </div>
+            <div class="map-btn"><svg viewBox="0 0 14 14"><path d="M1 3.5h12M3.5 7h7M5.5 10.5h3"/></svg></div>
+            <div class="budget-tag"><div class="budget-tag-dot"></div><span class="budget-tag-val">68 BYN</span></div>
+          </div>
+          <div class="chips-scroll">
+            <span class="chip active">Рядом</span>
+            <span class="chip">До 50 BYN</span>
+            <span class="chip">Сегодня</span>
+            <span class="chip">Еда</span>
+            <span class="chip">События</span>
+            <span class="chip">С друзьями</span>
+            <span class="chip">Бесплатно</span>
+            <span class="chip">До 30 мин</span>
+          </div>
+        </div>
+
+        <div class="map-canvas">
+          <!-- city blocks -->
+          <div class="blk" style="left:3%;top:2%;width:22%;height:15%;background:rgba(255,255,255,.028)"></div>
+          <div class="blk" style="left:29%;top:2%;width:26%;height:15%;background:rgba(255,255,255,.036)"></div>
+          <div class="blk" style="left:60%;top:2%;width:37%;height:15%;background:rgba(255,255,255,.028)"></div>
+          <div class="blk" style="left:3%;top:21%;width:22%;height:13%;background:rgba(45,212,191,.07)"></div>
+          <div class="blk" style="left:29%;top:21%;width:26%;height:13%;background:rgba(255,255,255,.028)"></div>
+          <div class="blk" style="left:60%;top:21%;width:37%;height:13%;background:rgba(255,255,255,.036)"></div>
+          <div class="blk" style="left:3%;top:38%;width:22%;height:12%;background:rgba(255,255,255,.028)"></div>
+          <div class="blk" style="left:29%;top:38%;width:26%;height:12%;background:rgba(56,189,248,.055)"></div>
+          <div class="blk" style="left:60%;top:38%;width:28%;height:12%;background:rgba(255,255,255,.028)"></div>
+          <div class="blk" style="left:3%;top:54%;width:45%;height:10%;background:rgba(255,255,255,.024)"></div>
+          <div class="blk" style="left:53%;top:54%;width:44%;height:10%;background:rgba(255,255,255,.028)"></div>
+
+          <!-- route line -->
+          <svg class="route-svg" viewBox="0 0 366 570" preserveAspectRatio="none">
+            <path class="route-glow" d="M183,368 Q167,300 165,238 Q210,200 255,160 Q284,122 314,84"/>
+            <path class="route-line" d="M183,368 Q167,300 165,238 Q210,200 255,160 Q284,122 314,84"/>
+          </svg>
+
+          <!-- pins -->
+          <div class="pin" style="left:165px;top:232px">
+            <div class="pin-body" style="background:rgba(163,255,95,.15);border:2px solid #A3FF5F"><span class="pin-emoji">☕</span></div>
+            <div class="pin-tag">Urban Coffee</div>
+          </div>
+          <div class="pin" style="left:255px;top:154px">
+            <div class="pin-body" style="background:rgba(139,92,246,.15);border:2px solid #8B5CF6"><span class="pin-emoji">🎨</span></div>
+            <div class="pin-tag">Gallery Space</div>
+          </div>
+          <div class="pin" style="left:314px;top:78px">
+            <div class="pin-body" style="background:rgba(251,191,36,.15);border:2px solid #FBBF24"><span class="pin-emoji">🍹</span></div>
+            <div class="pin-tag">Local Bar</div>
+          </div>
+          <div class="pin" style="left:62px;top:202px">
+            <div class="pin-body" style="background:rgba(45,212,191,.15);border:2px solid #2DD4BF"><span class="pin-emoji">🌿</span></div>
+            <div class="pin-tag">Парк</div>
+          </div>
+          <div class="pin" style="left:306px;top:284px">
+            <div class="pin-body" style="background:rgba(244,114,182,.15);border:2px solid #F472B6"><span class="pin-emoji">🎵</span></div>
+            <div class="pin-tag">Концерт</div>
+          </div>
+
+          <!-- user location -->
+          <div class="user-dot" style="left:183px;top:368px">
+            <div class="pulse-1"></div>
+            <div class="pulse-2"></div>
+            <div class="user-center"></div>
+          </div>
+
+          <!-- distance labels -->
+          <div class="dist-tag" style="left:108px;top:292px">8 мин пешком</div>
+          <div class="dist-tag" style="left:200px;top:196px">1.2 км</div>
+
+          <!-- compass & zoom -->
+          <div class="compass">
+            <svg viewBox="0 0 12 12" fill="none"><path d="M6 1.5l1.2 3.3L6 4.2l-1.2.6L6 1.5z" fill="#A3FF5F"/><path d="M6 10.5L4.8 7.2 6 7.8l1.2-.6L6 10.5z" fill="rgba(255,255,255,.25)"/><circle cx="6" cy="6" r="1" fill="rgba(255,255,255,.2)"/></svg>
+          </div>
+          <div class="zoom"><div class="zoom-btn">+</div><div class="zoom-btn">−</div></div>
+
+          <!-- bottom sheet -->
+          <div class="bottom-sheet">
+            <div class="bs-handle"></div>
+            <div class="bs-title">Рядом с вами</div>
+            <div class="bs-list">
+              <div class="sheet-card">
+                <div class="sc-ico" style="background:rgba(163,255,95,.08)">☕</div>
+                <div class="sc-body">
+                  <div class="sc-name">Urban Coffee</div>
+                  <div class="sc-meta"><span class="sc-dist">450 м</span><span class="badge badge-l">по бюджету</span></div>
+                </div>
+                <div class="sc-right"><div class="sc-price">12 BYN</div><div class="sc-info">8 мин пешком</div></div>
+              </div>
+              <div class="sheet-card">
+                <div class="sc-ico" style="background:rgba(139,92,246,.08)">🎨</div>
+                <div class="sc-body">
+                  <div class="sc-name">Gallery Space</div>
+                  <div class="sc-meta"><span class="sc-dist">1.1 км</span><span class="badge badge-p">по интересам</span></div>
+                </div>
+                <div class="sc-right"><div class="sc-price">18 BYN</div><div class="sc-info">до 21:00</div></div>
+              </div>
+              <div class="sheet-card">
+                <div class="sc-ico" style="background:rgba(56,189,248,.08)">🍹</div>
+                <div class="sc-body">
+                  <div class="sc-name">Local Bar</div>
+                  <div class="sc-meta"><span class="sc-dist">1.4 км</span><span class="badge badge-b">друзья были</span></div>
+                </div>
+                <div class="sc-right"><div class="sc-price">22 BYN</div><div class="sc-info">забронировать</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /map -->
+
+      <!-- ═══════════ ROUTE ═══════════ -->
+      <div class="screen" data-screen="route">
+        <div class="app-bar">
+          <div class="app-bar-title">Маршрут на вечер</div>
+          <div class="app-bar-action">Изменить</div>
+        </div>
+        <div class="screen-scroll">
+          <div class="timeline">
+            <div class="tl-step">
+              <div class="tl-left">
+                <div class="tl-dot" style="border-color:#A3FF5F;background:rgba(163,255,95,.12)"></div>
+                <div class="tl-line" style="background:rgba(163,255,95,.22)"></div>
+              </div>
+              <div class="tl-body">
+                <div class="tl-time">18:30</div>
+                <div class="c tl-card">
+                  <div class="tl-ico">☕</div>
+                  <div class="tl-info"><div class="tl-name">Urban Coffee</div><div class="tl-sub">450 м · кофейня</div></div>
+                  <div class="tl-price">12 BYN</div>
+                </div>
+              </div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-left">
+                <div class="tl-dot" style="border-color:#8B5CF6;background:rgba(139,92,246,.12)"></div>
+                <div class="tl-line" style="background:rgba(139,92,246,.22)"></div>
+              </div>
+              <div class="tl-body">
+                <div class="tl-time">19:20</div>
+                <div class="c tl-card">
+                  <div class="tl-ico">🎨</div>
+                  <div class="tl-info"><div class="tl-name">Gallery Space</div><div class="tl-sub">1.1 км · выставка</div></div>
+                  <div class="tl-price">18 BYN</div>
+                </div>
+              </div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-left">
+                <div class="tl-dot" style="border-color:#FBBF24;background:rgba(251,191,36,.12)"></div>
+              </div>
+              <div class="tl-body">
+                <div class="tl-time">21:00</div>
+                <div class="c tl-card">
+                  <div class="tl-ico">🍹</div>
+                  <div class="tl-info"><div class="tl-name">Local Bar</div><div class="tl-sub">1.4 км · бар</div></div>
+                  <div class="tl-price">22 BYN</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="c route-summary">
+            <div class="rs-row"><span class="rs-label">Итого</span><span class="rs-value" style="color:var(--amber)">52 BYN</span></div>
+            <div class="rs-bar-track"><div class="rs-bar" style="width:77%"></div></div>
+            <div class="rs-row"><span class="rs-label">Бюджет</span><span class="rs-value" style="color:var(--t2)">68 BYN</span></div>
+            <div class="rs-row"><span class="rs-label">Остаток</span><span class="rs-value" style="color:var(--lime)">16 BYN</span></div>
+          </div>
+          <div class="btn-main btn-blue">Забронировать места</div>
+        </div>
+      </div><!-- /route -->
+
+      <!-- ═══════════ BUDGET ═══════════ -->
+      <div class="screen" data-screen="budget">
+        <div class="app-bar"><div class="app-bar-title">Бюджет</div></div>
+        <div class="screen-scroll">
+          <div class="budget-hero">
+            <div class="bh-label">Доступно на досуг</div>
+            <div class="bh-amount">68 BYN</div>
+            <div class="bh-sub">обновлено сегодня</div>
+          </div>
+
+          <div class="c stat-block">
+            <div class="stat-head"><span class="stat-title">Потрачено за неделю</span><span class="stat-value">112 / 180 BYN</span></div>
+            <div class="stat-prog"><div class="stat-bar" style="width:62%;background:linear-gradient(90deg,var(--lime),var(--teal))"></div></div>
+          </div>
+
+          <div class="c stat-block">
+            <div class="stat-head"><span class="stat-title">Лимит на вечер</span><span class="stat-value" style="color:var(--lime)">50 BYN</span></div>
+            <div class="stat-prog"><div class="stat-bar" style="width:77%;background:linear-gradient(90deg,var(--lime),var(--teal))"></div></div>
+          </div>
+
+          <div class="c toggle-row" data-toggle>
+            <span class="toggle-label">Учитывать бюджет в рекомендациях</span>
+            <div class="toggle on"></div>
+          </div>
+
+          <div class="c tx-block">
+            <div class="tx-label">Последние расходы</div>
+            <div class="tx-row">
+              <div class="tx-ico">☕</div>
+              <div class="tx-info"><div class="tx-name">Urban Coffee</div><div class="tx-date">вчера</div></div>
+              <div class="tx-price">12 BYN</div>
+            </div>
+            <div class="tx-row">
+              <div class="tx-ico">🎨</div>
+              <div class="tx-info"><div class="tx-name">Gallery Space</div><div class="tx-date">2 дня назад</div></div>
+              <div class="tx-price">18 BYN</div>
+            </div>
+            <div class="tx-row">
+              <div class="tx-ico">🍹</div>
+              <div class="tx-info"><div class="tx-name">Local Bar</div><div class="tx-date">в выходные</div></div>
+              <div class="tx-price">22 BYN</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /budget -->
+
+      <!-- ═══════════ PROFILE ═══════════ -->
+      <div class="screen" data-screen="profile">
+        <div class="app-bar"><div class="app-bar-title">Профиль</div></div>
+        <div class="screen-scroll">
+          <div class="profile-top">
+            <div class="profile-avatar">АМ</div>
+            <div>
+              <div class="profile-name">Алексей М.</div>
+              <div class="profile-loc">📍 Минск, Беларусь</div>
+            </div>
+          </div>
+
+          <div class="c p-section">
+            <div class="p-section-title">Интересы</div>
+            <div class="interest-chips">
+              <span class="interest-chip active">☕ Кофе</span>
+              <span class="interest-chip active">🎨 Арт</span>
+              <span class="interest-chip active">🎵 Музыка</span>
+              <span class="interest-chip">🍹 Бары</span>
+              <span class="interest-chip">🌿 Парки</span>
+              <span class="interest-chip">🎭 Театр</span>
+            </div>
+          </div>
+
+          <div class="c p-section">
+            <div class="p-section-title">Подключено</div>
+            <div class="svc-row"><div class="svc-icon">📱</div><div class="svc-name">Telegram</div><div class="svc-status">активно</div></div>
+            <div class="svc-row"><div class="svc-icon">📸</div><div class="svc-name">Instagram</div><div class="svc-status">активно</div></div>
+          </div>
+
+          <div class="c p-section">
+            <div class="p-section-title">Сохранённые места</div>
+            <div class="svc-row"><div class="svc-icon">☕</div><div class="svc-name">Urban Coffee</div><span class="badge badge-l">450 м</span></div>
+            <div class="svc-row"><div class="svc-icon">🎨</div><div class="svc-name">Gallery Space</div><span class="badge badge-p">1.1 км</span></div>
+            <div class="svc-row"><div class="svc-icon">🍹</div><div class="svc-name">Local Bar</div><span class="badge badge-b">1.4 км</span></div>
+          </div>
+
+          <div class="c p-section">
+            <div class="p-section-title">Приватность</div>
+            <div class="priv-row">
+              <div class="priv-left"><div class="priv-title">Видимость маршрута</div><div class="priv-sub">Только для друзей</div></div>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /profile -->
+
+    </div><!-- /screens-container -->
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <div class="nav-item" data-tab="home">
+        <svg viewBox="0 0 22 22"><path d="M3 10L11 4l8 6V19a1 1 0 01-1 1H4a1 1 0 01-1-1V10z"/><path d="M8 20v-7h6v7"/></svg>
+        <span>Главная</span>
+      </div>
+      <div class="nav-item active" data-tab="map">
+        <div class="nav-map-icon">
+          <svg viewBox="0 0 22 22" width="21" height="21" style="stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M2 6l7-3 6 3 5-2.5v13L15 17l-6-3-7 3V6z"/><path d="M9 3v11M15 6v8"/></svg>
+        </div>
+        <span>Карта</span>
+      </div>
+      <div class="nav-item" data-tab="route">
+        <svg viewBox="0 0 22 22"><circle cx="5" cy="5" r="2.2"/><circle cx="17" cy="17" r="2.2"/><path d="M7.2 5H12a4 4 0 014 4v5.8"/></svg>
+        <span>Маршрут</span>
+      </div>
+      <div class="nav-item" data-tab="budget">
+        <svg viewBox="0 0 22 22"><rect x="2" y="6" width="18" height="13" rx="2"/><path d="M2 10h18"/><circle cx="7" cy="14.5" r="1.3" fill="currentColor"/><circle cx="11.5" cy="14.5" r="1.3" fill="currentColor"/></svg>
+        <span>Бюджет</span>
+      </div>
+      <div class="nav-item" data-tab="profile">
+        <svg viewBox="0 0 22 22"><circle cx="11" cy="8" r="3.5"/><path d="M2.5 20c0-5 3.8-8 8.5-8s8.5 3 8.5 8"/></svg>
+        <span>Профиль</span>
+      </div>
+    </nav>
+
+  </div><!-- /phone-screen -->
+  </div><!-- /phone -->
+  </div><!-- /phone-col -->
+
+</div><!-- /layout -->
+</div><!-- /page -->
+
+<script>
+/* ── Navigation ── */
+const navItems = document.querySelectorAll('.nav-item[data-tab]');
+const screens  = document.querySelectorAll('.screen[data-screen]');
+
+function goTo(tab) {
+  screens.forEach(s  => s.classList.toggle('active', s.dataset.screen === tab));
+  navItems.forEach(n => n.classList.toggle('active', n.dataset.tab   === tab));
+}
+
+navItems.forEach(n => n.addEventListener('click', () => goTo(n.dataset.tab)));
+
+/* ── Map chips ── */
+document.querySelectorAll('.chip').forEach(c =>
+  c.addEventListener('click', () => c.classList.toggle('active'))
+);
+
+/* ── Toggle rows ── */
+document.querySelectorAll('[data-toggle]').forEach(row =>
+  row.addEventListener('click', () =>
+    row.querySelector('.toggle')?.classList.toggle('on')
+  )
+);
+
+/* ── Interest chips ── */
+document.querySelectorAll('.interest-chip').forEach(c =>
+  c.addEventListener('click', () => c.classList.toggle('active'))
+);
+
+/* ── "Build route" → route tab ── */
+document.querySelector('.cta-route')?.addEventListener('click', () => goTo('route'));
+</script>
+
+</body>
+</html>
